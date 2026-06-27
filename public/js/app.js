@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   wireSampleBtn();
   wireAnalyze();
   wireExport();
+  wireReset();
 });
 
 // ── Collapse panel ──────────────────────────────────────────────────────
@@ -387,6 +388,42 @@ function wireExport() {
     });
     a.click();
     URL.revokeObjectURL(url);
+  });
+}
+
+// ── Reset ────────────────────────────────────────────────────────────────
+function wireReset() {
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    // Clear state
+    selectedGroup = null;
+    dettectYaml   = "";
+    lastResults   = null;
+    activeFilter  = "all";
+
+    // Reset group panel
+    document.getElementById("group-search").value = "";
+    renderGroupGrid(allGroups);
+    document.getElementById("selected-group-badge").classList.add("hidden");
+    document.getElementById("group-panel").classList.remove("collapsed");
+    document.getElementById("btn-collapse-group").classList.remove("collapsed");
+
+    // Reset upload
+    document.getElementById("yaml-file").value       = "";
+    document.getElementById("upload-text").textContent = "Drop YAML here or click to browse";
+    document.getElementById("yaml-status").textContent = "";
+    document.getElementById("yaml-status").className   = "yaml-status";
+
+    // Reset filters
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector(".filter-btn[data-filter='all']").classList.add("active");
+    const rsearch = document.getElementById("results-search");
+    if (rsearch) rsearch.value = "";
+
+    // Hide results
+    document.getElementById("results-section").classList.add("hidden");
+
+    updateAnalyzeBtn();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
