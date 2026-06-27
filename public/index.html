@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Threat-Informed Defense Planner | MITRE ATT&CK + D3FEND</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1117'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='%2358a6ff'>⚔</text></svg>" />
 </head>
 <body>
   <header>
@@ -27,14 +28,21 @@
   <main>
     <!-- ── Step 1: Group selector ─────────────────────────────────────── -->
     <section class="card" id="step-group">
-      <div class="step-label">Step 1</div>
-      <h2>Select Threat Actor</h2>
-      <p class="hint">Choose the ATT&amp;CK group you want to defend against.</p>
-      <div class="search-row">
-        <input type="text" id="group-search" placeholder="Search by name or alias…" autocomplete="off" />
+      <div class="card-header" id="step-group-toggle">
+        <div>
+          <div class="step-label">Step 1</div>
+          <h2>Select Threat Actor <span id="selected-group-badge" class="selected-badge hidden"></span></h2>
+        </div>
+        <button class="collapse-btn" id="btn-collapse-group" aria-expanded="true" aria-controls="group-panel" title="Toggle panel">▲</button>
       </div>
-      <div id="group-grid" class="group-grid">
-        <div class="loading-spinner">Loading groups…</div>
+      <div id="group-panel">
+        <p class="hint">Choose the ATT&amp;CK group you want to defend against.</p>
+        <div class="search-row">
+          <input type="text" id="group-search" placeholder="Search by name or alias…" autocomplete="off" />
+        </div>
+        <div id="group-grid" class="group-grid">
+          <div class="loading-spinner">Loading groups…</div>
+        </div>
       </div>
     </section>
 

@@ -11,12 +11,37 @@ let activeFilter   = "all";
 // ── Initialise ─────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
   await loadGroups();
+  wireCollapse();
   wireUpload();
   wireFilters();
   wireSampleBtn();
   wireAnalyze();
   wireExport();
 });
+
+// ── Collapse panel ──────────────────────────────────────────────────────
+function wireCollapse() {
+  const toggle = document.getElementById("step-group-toggle");
+  const btn    = document.getElementById("btn-collapse-group");
+  const panel  = document.getElementById("group-panel");
+
+  function setCollapsed(collapsed) {
+    panel.classList.toggle("collapsed", collapsed);
+    btn.classList.toggle("collapsed", collapsed);
+    btn.setAttribute("aria-expanded", String(!collapsed));
+    btn.textContent = collapsed ? "▲" : "▲";
+  }
+
+  toggle.addEventListener("click", () => {
+    setCollapsed(!panel.classList.contains("collapsed"));
+  });
+}
+
+function collapseGroupPanel() {
+  document.getElementById("group-panel").classList.add("collapsed");
+  document.getElementById("btn-collapse-group").classList.add("collapsed");
+  document.getElementById("btn-collapse-group").setAttribute("aria-expanded", "false");
+}
 
 // ── Load groups ─────────────────────────────────────────────────────────
 async function loadGroups() {
@@ -62,6 +87,16 @@ function selectGroup(id) {
       : allGroups
   );
   updateAnalyzeBtn();
+
+  // Update badge and collapse panel
+  const badge = document.getElementById("selected-group-badge");
+  if (selectedGroup) {
+    badge.textContent = selectedGroup.name;
+    badge.classList.remove("hidden");
+    collapseGroupPanel();
+  } else {
+    badge.classList.add("hidden");
+  }
 }
 
 function matchGroup(g, q) {

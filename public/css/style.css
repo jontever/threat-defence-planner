@@ -103,6 +103,61 @@ main {
   margin-bottom: 20px;
 }
 
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 0;
+  user-select: none;
+}
+
+.card-header + #group-panel {
+  margin-top: 16px;
+}
+
+.collapse-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, transform 0.2s;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.collapse-btn:hover { color: var(--accent); border-color: var(--accent); }
+.collapse-btn.collapsed { transform: rotate(180deg); }
+
+#group-panel {
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+#group-panel.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.selected-badge {
+  display: inline-block;
+  background: rgba(88,166,255,0.15);
+  border: 1px solid rgba(88,166,255,0.4);
+  color: var(--accent);
+  border-radius: 12px;
+  padding: 1px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
 .step-label {
   font-size: 11px;
   font-weight: 600;
