@@ -591,6 +591,47 @@ tbody tr:hover { background: var(--bg3); }
 .d3fend-count.has-controls { color: var(--accent2); }
 .d3fend-count.no-controls  { color: var(--text-muted); }
 
+/* ── Empty techniques section ─────────────────────────────────────────── */
+.empty-section-row td { padding: 0; border-top: 1px dashed var(--border); }
+
+.empty-details {
+  padding: 10px 14px;
+}
+
+.empty-details summary {
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.empty-details summary::before { content: "▶"; font-size: 10px; transition: transform 0.15s; }
+.empty-details[open] summary::before { transform: rotate(90deg); }
+
+.empty-list {
+  padding: 10px 0 4px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.empty-tid {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-decoration: none;
+}
+
+.empty-tid:hover { color: var(--accent); border-color: var(--accent); }
+
 /* ── Expand row ───────────────────────────────────────────────────────── */
 .expand-btn {
   background: none;

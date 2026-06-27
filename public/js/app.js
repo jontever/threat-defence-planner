@@ -7,6 +7,11 @@ let selectedGroup  = null;
 let dettectYaml    = "";
 let lastResults    = null;
 let activeFilter   = "all";
+let hideEmpty      = true;   // hide techniques with no vis, no det, no D3FEND
+
+function isEmptyTechnique(r) {
+  return r.visibility_score === 0 && r.detection_score === 0 && r.d3fend_count === 0;
+}
 
 // ── Theme toggle ────────────────────────────────────────────────────────
 function wireTheme() {
@@ -269,12 +274,32 @@ function renderTable(results) {
     return true;
   });
 
-  if (!filtered.length) {
+  const actionable = filtered.filter(r => !hideEmpty || !isEmptyTechnique(r));
+  const empty      = filtered.filter(r => hideEmpty && isEmptyTechnique(r));
+
+  if (!actionable.length && !empty.length) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:32px">No techniques match current filters.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = filtered.map(r => buildRow(r)).join("");
+  let html = actionable.map(r => buildRow(r)).join("");
+
+  if (empty.length) {
+    const ids = empty.map(r =>
+      `<a href="${r.technique_url}" target="_blank" class="empty-tid">${r.technique_id}</a>`
+    ).join(" ");
+    html += `
+      <tr class="empty-section-row">
+        <td colspan="7">
+          <details class="empty-details">
+            <summary>${empty.length} technique${empty.length > 1 ? "s" : ""} with no coverage data or D3FEND controls</summary>
+            <div class="empty-list">${ids}</div>
+          </details>
+        </td>
+      </tr>`;
+  }
+
+  tbody.innerHTML = html;
 
   // Wire expand buttons
   tbody.querySelectorAll(".expand-btn").forEach(btn => {
@@ -361,6 +386,12 @@ function wireFilters() {
   document.getElementById("results-search").addEventListener("input", () => {
     if (lastResults) renderTable(lastResults.results);
   });
+
+  document.getElementById("btn-hide-empty").addEventListener("click", function() {
+    hideEmpty = !hideEmpty;
+    this.classList.toggle("active", hideEmpty);
+    if (lastResults) renderTable(lastResults.results);
+  });
 }
 
 // ── Export CSV ──────────────────────────────────────────────────────────
@@ -399,6 +430,8 @@ function wireReset() {
     dettectYaml   = "";
     lastResults   = null;
     activeFilter  = "all";
+    hideEmpty     = true;
+    document.getElementById("btn-hide-empty").classList.add("active");
 
     // Reset group panel
     document.getElementById("group-search").value = "";
