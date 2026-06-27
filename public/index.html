@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Threat-Informed Defense Planner | MITRE ATT&CK + D3FEND</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">⚔</span>
+        <div>
+          <h1>Threat-Informed Defense Planner</h1>
+          <p class="brand-sub">ATT&amp;CK · D3FEND · DeTT&amp;CT</p>
+        </div>
+      </div>
+      <nav class="header-links">
+        <a href="https://attack.mitre.org" target="_blank">ATT&amp;CK</a>
+        <a href="https://d3fend.mitre.org" target="_blank">D3FEND</a>
+        <a href="https://rabobank-cdc.github.io/dettect-editor/#/home" target="_blank">DeTT&amp;CT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── Step 1: Group selector ─────────────────────────────────────── -->
+    <section class="card" id="step-group">
+      <div class="step-label">Step 1</div>
+      <h2>Select Threat Actor</h2>
+      <p class="hint">Choose the ATT&amp;CK group you want to defend against.</p>
+      <div class="search-row">
+        <input type="text" id="group-search" placeholder="Search by name or alias…" autocomplete="off" />
+      </div>
+      <div id="group-grid" class="group-grid">
+        <div class="loading-spinner">Loading groups…</div>
+      </div>
+    </section>
+
+    <!-- ── Step 2: DeTT&CT upload ─────────────────────────────────────── -->
+    <section class="card" id="step-dettect">
+      <div class="step-label">Step 2</div>
+      <h2>Upload DeTT&amp;CT Coverage <span class="optional">(optional)</span></h2>
+      <p class="hint">Upload your DeTT&amp;CT techniques YAML to show your current visibility and detection scores against each technique. Without it, all scores default to 0.</p>
+      <div class="upload-area" id="upload-area">
+        <input type="file" id="yaml-file" accept=".yaml,.yml" />
+        <label for="yaml-file" class="upload-label">
+          <span class="upload-icon">📄</span>
+          <span id="upload-text">Drop YAML here or click to browse</span>
+        </label>
+      </div>
+      <div class="upload-actions">
+        <button class="btn btn-ghost" id="btn-sample">Use sample file</button>
+        <span id="yaml-status" class="yaml-status"></span>
+      </div>
+    </section>
+
+    <!-- ── Step 3: Analyse ────────────────────────────────────────────── -->
+    <section class="card step-action">
+      <button class="btn btn-primary btn-large" id="btn-analyze" disabled>
+        <span class="btn-icon">🔍</span> Analyse Gap
+      </button>
+      <p id="analyze-hint" class="analyze-hint">Select a threat actor to continue</p>
+    </section>
+
+    <!-- ── Results ────────────────────────────────────────────────────── -->
+    <section id="results-section" class="hidden">
+      <div class="results-header">
+        <div class="results-title">
+          <h2 id="results-group-name"></h2>
+          <p id="results-group-desc" class="results-desc"></p>
+        </div>
+        <div class="results-actions">
+          <button class="btn btn-ghost" id="btn-export">⬇ Export CSV</button>
+          <a id="results-group-url" href="#" target="_blank" class="btn btn-ghost">View on ATT&amp;CK ↗</a>
+        </div>
+      </div>
+
+      <!-- Coverage summary -->
+      <div class="summary-grid" id="summary-grid">
+        <div class="summary-card critical"><div class="summary-num" id="s-critical">0</div><div class="summary-label">Critical Gaps</div></div>
+        <div class="summary-card high"><div class="summary-num" id="s-high">0</div><div class="summary-label">High Gaps</div></div>
+        <div class="summary-card covered"><div class="summary-num" id="s-covered">0</div><div class="summary-label">Techniques Covered</div></div>
+        <div class="summary-card total"><div class="summary-num" id="s-total">0</div><div class="summary-label">Techniques Total</div></div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="critical">Critical</button>
+        <button class="filter-btn" data-filter="high">High</button>
+        <button class="filter-btn" data-filter="medium">Medium</button>
+        <button class="filter-btn" data-filter="low">Low</button>
+        <input type="text" id="results-search" placeholder="Search techniques…" />
+      </div>
+
+      <!-- Results table -->
+      <div class="table-wrap">
+        <table id="results-table">
+          <thead>
+            <tr>
+              <th>Technique</th>
+              <th>Tactic(s)</th>
+              <th title="Your DeTT&CT visibility score (0–5)">Visibility</th>
+              <th title="Your DeTT&CT detection score (0–5)">Detection</th>
+              <th title="Number of D3FEND countermeasures available">D3FEND Controls</th>
+              <th>Priority</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p id="loading-text">Fetching D3FEND countermeasures…</p>
+        <p class="loading-sub">This may take 15–30 s on first run</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Built with <a href="https://attack.mitre.org">MITRE ATT&amp;CK</a>, <a href="https://d3fend.mitre.org">D3FEND</a>, and <a href="https://rabobank-cdc.github.io/dettect-editor">DeTT&amp;CT</a> · <a href="https://github.com/jontever/threat-defense-planner">GitHub</a></p>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
