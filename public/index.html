@@ -6,6 +6,13 @@
   <title>Threat-Informed Defense Planner | MITRE ATT&CK + D3FEND</title>
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1117'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='%2358a6ff'>⚔</text></svg>" />
+  <!-- Apply saved theme before paint to avoid flash -->
+  <script>
+    (function() {
+      const t = localStorage.getItem("theme");
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+    })();
+  </script>
 </head>
 <body>
   <header>
@@ -21,6 +28,7 @@
         <a href="https://attack.mitre.org" target="_blank">ATT&amp;CK</a>
         <a href="https://d3fend.mitre.org" target="_blank">D3FEND</a>
         <a href="https://rabobank-cdc.github.io/dettect-editor/#/home" target="_blank">DeTT&amp;CT</a>
+        <button class="theme-toggle" id="btn-theme" title="Toggle light/dark mode">🌙 Dark</button>
       </nav>
     </div>
   </header>

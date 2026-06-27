@@ -16,6 +16,23 @@
   --low:         #3fb950;
   --radius:      8px;
   --font:        'Inter', system-ui, -apple-system, sans-serif;
+  --shadow:      none;
+}
+
+[data-theme="light"] {
+  --bg:          #f6f8fa;
+  --bg2:         #ffffff;
+  --bg3:         #f0f2f5;
+  --border:      #d0d7de;
+  --text:        #1f2328;
+  --text-muted:  #656d76;
+  --accent:      #0969da;
+  --accent2:     #1a7f37;
+  --critical:    #cf222e;
+  --high:        #bc4c00;
+  --medium:      #9a6700;
+  --low:         #1a7f37;
+  --shadow:      0 1px 3px rgba(0,0,0,0.08);
 }
 
 html { scroll-behavior: smooth; }
@@ -84,6 +101,23 @@ header {
 }
 
 .header-links a:hover { color: var(--text); text-decoration: none; }
+
+.theme-toggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 3px 10px;
+  line-height: 1.6;
+  transition: border-color 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.theme-toggle:hover { border-color: var(--accent); color: var(--text); }
 
 /* ── Main layout ──────────────────────────────────────────────────────── */
 main {
@@ -218,11 +252,11 @@ input[type="text"]:focus { border-color: var(--accent); }
   user-select: none;
 }
 
-.group-card:hover { border-color: var(--accent); background: #1c2230; }
+.group-card:hover { border-color: var(--accent); background: var(--bg3); }
 
 .group-card.selected {
   border-color: var(--accent);
-  background: #132033;
+  background: var(--bg3);
   box-shadow: 0 0 0 1px var(--accent);
 }
 
@@ -631,7 +665,7 @@ tbody tr:hover { background: var(--bg3); }
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(13,17,23,0.85);
+  background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
   justify-content: center;

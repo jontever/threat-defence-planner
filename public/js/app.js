@@ -8,8 +8,35 @@ let dettectYaml    = "";
 let lastResults    = null;
 let activeFilter   = "all";
 
+// ── Theme toggle ────────────────────────────────────────────────────────
+function wireTheme() {
+  const btn = document.getElementById("btn-theme");
+  const root = document.documentElement;
+
+  function applyTheme(theme) {
+    if (theme === "light") {
+      root.setAttribute("data-theme", "light");
+      btn.textContent = "☀️ Light";
+    } else {
+      root.removeAttribute("data-theme");
+      btn.textContent = "🌙 Dark";
+    }
+    localStorage.setItem("theme", theme);
+  }
+
+  // Sync button label to whatever was restored from localStorage
+  const saved = localStorage.getItem("theme") || "dark";
+  applyTheme(saved);
+
+  btn.addEventListener("click", () => {
+    const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+    applyTheme(current === "light" ? "dark" : "light");
+  });
+}
+
 // ── Initialise ─────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
+  wireTheme();
   await loadGroups();
   wireCollapse();
   wireUpload();
